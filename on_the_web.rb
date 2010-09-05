@@ -1,9 +1,20 @@
+#!/usr/bin/ruby -Ku
+
+require 'optparse'
+
 require 'rubygems'
 require 'haml'
 require 'json'
 require 'pit'
 require 'sinatra'
 require 'twitter'
+
+port = 4567
+opt = OptionParser.new
+opt.on('-p VAL') { |v| port = v.to_i }
+opt.parse!(ARGV)
+
+set :port, port
 
 class AllMicroBlogClient
   def initialize(_arr=[])
@@ -206,6 +217,7 @@ __END__
 %html
   %head
     %meta{ :charset => 'utf-8'}
+    <meta name="viewport" content="width=device-width" />
   %body
     != yield
 @@ index
@@ -216,7 +228,7 @@ __END__
 @@ timeline
 %form{ :method => 'POST', :action => '/update' }
   %input{ :type => 'hidden', :name => '_method', :value => 'PUT' }
-  %textarea{ :name => 'tweet', :cols => '20', :rows => '2' }
+  %textarea{ :name => 'tweet', :cols => '40', :rows => '5' }
   %input{ :type => 'submit' }
 - @ambc.friends_timeline.each do |k, v|
   %p= k
