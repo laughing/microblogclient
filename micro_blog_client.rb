@@ -1,8 +1,8 @@
 #!/usr/bin/ruby -Ku
 
-require 'readline'
-
 require 'net/http'
+require 'readline'
+require 'time'
 require 'uri'
 
 require 'rubygems'
@@ -38,7 +38,11 @@ class AllMicroBlogClient
   end
 
   def print_status(status)
-    puts "%-12s : %s" % [status['user']['screen_name'], status['text'].gsub(/\n/, ' ')]
+    if status['created_at']
+      puts "%-12s : %s [%s]" % [status['user']['screen_name'], status['text'].gsub(/\n/, ' '), Time.parse(status['created_at']).strftime("%Y/%m/%d %X")]
+    else 
+      puts "%-12s : %s" % [status['user']['screen_name'], status['text'].gsub(/\n/, ' ')]
+    end
   end
 end
 
